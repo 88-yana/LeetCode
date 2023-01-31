@@ -8,7 +8,7 @@ public:
 	vector<bool> seen;
 	void DFS(vector<vector<char>>& board, vector<string>& words, int i, int j, int k, int index) {
 		const bool is_in_y_range = 0 <= i && i < board.size();
-		const bool is_in_x_range = 0 <= j && j < board[i].size();
+		const bool is_in_x_range = 0 <= j && j < board[0].size();
 		if (seen[k])
 			return ;
 		if (!is_in_y_range || !is_in_x_range)
@@ -28,7 +28,7 @@ public:
 	vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
 		seen.assign(words.size(), false);
 		for (int i = 0; i < board.size(); i++) {
-			for (int j = 0; j < board[i].size(); j++) {
+			for (int j = 0; j < board[0].size(); j++) {
 				for (int k = 0; k < words.size(); k++) {
 					if (board[i][j] == words[k][0])
 						DFS(board, words, i, j, k, 0);

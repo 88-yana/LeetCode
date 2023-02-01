@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
 class Solution {
 public:
 	vector<string> ans;
 	vector<bool> seen;
+
 	void DFS(vector<vector<char>>& board, vector<string>& words, int i, int j, int k, int index) {
 		const bool is_in_y_range = 0 <= i && i < board.size();
 		const bool is_in_x_range = 0 <= j && j < board[0].size();
@@ -29,6 +29,7 @@ public:
 		}
 		board[i][j] = temp;
 	}
+
 	vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
 		seen.assign(words.size(), false);
 		for (int i = 0; i < board.size(); i++) {

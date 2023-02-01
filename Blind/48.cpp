@@ -5,7 +5,10 @@ class Solution {
 public:
 	vector<string> ans;
 	vector<bool> seen;
-
+	struct list {
+		map<char, vector<pair<char, struct list *>>> mp;
+	};
+	list lst;
 	void DFS(vector<vector<char>>& board, vector<string>& words, int i, int j, int k, int index) {
 		const bool is_in_y_range = 0 <= i && i < board.size();
 		const bool is_in_x_range = 0 <= j && j < board[0].size();
@@ -29,8 +32,17 @@ public:
 		}
 		board[i][j] = temp;
 	}
-
+	struct list *make_list(void) {
+		struct list * a;
+		return (a);
+	}
 	vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+		for (int i = 0; i < words.size(); i++) {
+			for (int j = 0; j < words[i].size() - 1; j++) {
+				lst.mp[words[i][j]].push_back(make_pair(words[i][j + 1], (struct list *) malloc(sizeof(struct list))));
+			}
+		}
+		
 		seen.assign(words.size(), false);
 		for (int i = 0; i < board.size(); i++) {
 			for (int j = 0; j < board[0].size(); j++) {

@@ -1,58 +1,62 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+class Node{
+	public:
+		string word;
+		bool isTerminal;
+		vector<Node*> next;
+		Node():next(26,NULL) {
+			isTerminal = false;
+		}
+};
+
 class Solution {
+	void put(string &s,int index, Node* current) { // adds a word to the trie
+		int c_a = s[index]-'a';
+		if (!current->next[c_a]) {
+			Node* newnode = new Node();
+			current->next[c_a] = newnode;
+		}
+		if (index != s.size() - 1) {
+			put(s, index + 1, current->next[c_a]);
+		}
+		else {
+			current->next[c_a]->isTerminal = true;
+			current->next[c_a]->word = s;
+		}
+	}
+
+void dfs(vector<vector<char>>& board,int i,int j,Node* t,set<string>& res,vector<vector<bool>>& visit){ 
+	if(i<0 || j<0 || i>=board.size() || j>= board[0].size())return; //** dfs call to search for word
+	char x = board[i][j]-'a';
+	t = t->next[x];
+	if(visit[i][j] || !t)return ;
+   
+	if(t->isTerminal)res.insert((t->word));
+	visit[i][j] = true;
+	dfs(board,i+1,j,t,res,visit);
+	dfs(board,i-1,j,t,res,visit);
+	dfs(board,i,j+1,t,res,visit);
+	dfs(board,i,j-1,t,res,visit);
+	visit[i][j]= false;
+}
+
 public:
-	vector<string> ans;
-	vector<bool> seen;
-	struct list {
-		map<char, vector<pair<char, struct list *>>> mp;
-	};
-	list lst;
-	void DFS(vector<vector<char>>& board, vector<string>& words, int i, int j, int k, int index) {
-		const bool is_in_y_range = 0 <= i && i < board.size();
-		const bool is_in_x_range = 0 <= j && j < board[0].size();
-		if (!is_in_y_range || !is_in_x_range)
-			return ;
-		if (seen[k])
-			return ;
-		char temp;
-		temp = board[i][j];
-		if (board[i][j] == words[k][index]) {
-			if (index == words[k].size() - 1) {
-				seen[k] = true;
-				ans.push_back(words[k]);
-				return ;
-			}
-			board[i][j] = 'A';
-			DFS(board, words, i - 1, j, k, index + 1);
-			DFS(board, words, i + 1, j, k, index + 1);
-			DFS(board, words, i, j - 1, k, index + 1);
-			DFS(board, words, i, j + 1, k, index + 1);
-		}
-		board[i][j] = temp;
-	}
-	struct list *make_list(void) {
-		struct list * a;
-		return (a);
-	}
 	vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-		for (int i = 0; i < words.size(); i++) {
-			for (int j = 0; j < words[i].size() - 1; j++) {
-				lst.mp[words[i][j]].push_back(make_pair(words[i][j + 1], (struct list *) malloc(sizeof(struct list))));
+		set<string> res;
+		Node* t = new Node();
+		for(string &s:words){
+			put(s,0,t);
+		}
+	vector<vector<bool>> visit(board.size(),vector<bool>(board[0].size(),false));
+		for(int i = 0 ;i<board.size();i++){
+			for(int j=0;j<board[0].size();j++){
+			   dfs(board,i,j,t,res,visit);
 			}
 		}
-		
-		seen.assign(words.size(), false);
-		for (int i = 0; i < board.size(); i++) {
-			for (int j = 0; j < board[0].size(); j++) {
-				for (int k = 0; k < words.size(); k++) {
-					if (board[i][j] == words[k][0])
-						DFS(board, words, i, j, k, 0);
-				}
-			}
-		}
-		return ans;
+		vector<string> ans(res.begin(),res.end());
+	   return ans;
 	}
 };
 

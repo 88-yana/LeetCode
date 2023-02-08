@@ -22,5 +22,5 @@ func missingNumber(nums []int) int {
 			return i
 		}
 	}
-	return len(nums)
+	return 0
 }

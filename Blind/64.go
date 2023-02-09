@@ -10,16 +10,16 @@ func max(a, b int) int {
 }
 
 func lengthOfLIS(nums []int) int {
-	maxLen := make([]int, len(nums))
+	dp := make([]int, len(nums))
 	for i := 0; i < len(nums); i++ {
 		for j := 0; j < i; j++ {
 			if nums[j] < nums[i] {
-				maxLen[i] = max(maxLen[i], maxLen[j]+1)
+				dp[i] = max(dp[i], dp[j]+1)
 			}
 		}
 	}
 	var ans int
-	for _, len := range maxLen {
+	for _, len := range dp {
 		ans = max(ans, len)
 	}
 	return ans + 1

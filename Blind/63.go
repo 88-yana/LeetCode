@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+//要件とは違う実装
+
 // 関数内で
 // p := struct {
 // 	name string

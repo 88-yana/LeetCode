@@ -10,7 +10,6 @@ struct TreeNode {
 
 class Solution {
 public:
-	// TreeNode *ans;
 	int DFS(TreeNode* current, TreeNode* p, TreeNode* q, TreeNode **ans) {
 		int has = 0;
 		if (current->left != NULL)

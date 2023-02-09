@@ -25,6 +25,13 @@ func lengthOfLIS(nums []int) int {
 	return ans + 1
 }
 
+//             *  
+// *         * * *
+// * *   *   * * *
+// * *   * * * * *
+// * * * * * * * *
+// 0 0 0 1 1 2 3 2
+
 func main() {
 	var nums = []int{5,3,2,3,6,8,7}
 	fmt.Println(lengthOfLIS(nums))

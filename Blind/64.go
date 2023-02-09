@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func max(a, b int) int {
 	if a > b {
 		return a
@@ -8,15 +10,22 @@ func max(a, b int) int {
 }
 
 func lengthOfLIS(nums []int) int {
-	var max_len int
-	ans := 1
-	for i := 0; i < len(nums)-1; i++ {
-		if nums[i] < nums[i+1] {
-			max_len++
-		} else {
-			ans = max(ans, max_len)
-			max_len = 0
+	maxLen := make([]int, len(nums))
+	for i := 0; i < len(nums); i++ {
+		for j := 0; j < i; j++ {
+			if nums[j] < nums[i] {
+				maxLen[i] = max(maxLen[i], maxLen[j]+1)
+			}
 		}
 	}
-	return ans
+	var ans int
+	for _, len := range maxLen {
+		ans = max(ans, len)
+	}
+	return ans + 1
+}
+
+func main() {
+	var nums = []int{5,3,2,3,6,8,7}
+	fmt.Println(lengthOfLIS(nums))
 }

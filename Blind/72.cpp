@@ -1,98 +1,111 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define LEFT 0
-#define RIGHT 1
-
 class Solution {
 public:
 	int eraseOverlapIntervals(vector<vector<int>>& intervals);
 };
 
 int Solution::eraseOverlapIntervals(vector<vector<int>>& intervals) {
+	sort(intervals.begin(), intervals.end(), [](vector<int> & s, vector<int> & t) {return s[1] < t[1];});
+	//小刻みに
 	int ans = 0;
-	sort(intervals.begin(), intervals.end());
-	for (int i = 0; i < intervals.size() - 1; i++) {
-		if (intervals[i][0] == intervals[i + 1][0]) {
-			if (intervals[i][1] == intervals[i + 1][1]) {
-				ans++;
-				intervals.erase(intervals.begin() + i);
-			}
-		}
+	int right = intervals[0][1];
+	for (int i = 1; i < intervals.size(); i++) {
+		if (intervals[i][0] < right)
+			ans++;
+		else
+			right = intervals[i][1];
 	}
-	sort(intervals.begin(), intervals.end(), [](vector<int> & s, vector<int> & t) {return s[1] - s[0] > t[1] - t[0];});
-	
-	vector<set<int>> overlap(intervals.size());
-	for (int i = 0; i < intervals.size(); i++) {
-		vector<int> a = intervals[i];
-		for (int j = i + 1; j < intervals.size(); j++) {
-			vector<int> b = intervals[j];
-			if (a[LEFT] < b[RIGHT])
-			{
-				if (b[LEFT] < a[RIGHT])
-				{
-					overlap[i].insert(j);
-					overlap[j].insert(i);
-				}
-			}
-		}
-	}
-
-	vector<pair<int, int>> temp(intervals.size());
-	for (int i = 0; i < overlap.size(); i++) {
-		temp[i].first = overlap[i].size();
-		temp[i].second = i;
-	}
-
-	int i = 0;
-	
-	while (1)
-	{
-		int max_size = -1;
-		int index;
-		for (int j = 0; j < temp.size(); j++)
-		{
-			if (max_size < temp[j].first)
-			{
-				max_size = temp[j].first;
-				index = temp[j].second;
-			}
-		}
-		for (set<int> u : overlap)
-			cout << "size is " << u.size() << " " << endl;
-		bool dependency = false;
-		for (int j = 0; j < overlap.size(); j++)
-			if (overlap[j].size())
-				dependency = true;
-		if (!dependency)
-			break ;
-		for (int u : overlap[index])
-		{
-			overlap[u].erase(index);
-			temp[u].first--;
-		}
-		overlap[index].clear();
-		temp[index].first = 0;
-		for (auto u : overlap)
-		{
-			cout << "overlap is " << i << endl;
-			for (auto v : u)
-			    cout << v << " ";
-			cout << endl;
-		}
-		ans++;
-		i++;
-	}
-	cout << "ans is" << ans << endl;
 	return ans;
 }
-
-
+// sort(P.begin(), P.end(), [](pair<int, int> & s, pair<int, int> & t) {return s.second > t.second;});
 
 
 // int Solution::eraseOverlapIntervals(vector<vector<int>>& intervals) {
-// 	sort(intervals.begin(), intervals.end(), [](vector<int> & s, vector<int> & t) {return s[0] < t[0];});
-// 	sort(intervals.begin(), intervals.end(), [](vector<int> & s, vector<int> & t) {return s[1] - s[0] < t[1] - t[0];});
+// 	int ans = 0;
+// 	for (int i = 0; i < intervals.size() - 1; i++) {
+// 		vector<int> a = intervals[i];
+// 		for (int j = i + 1; j < intervals.size(); j++) {
+// 			vector<int> b = intervals[j];
+// 			if (b[LEFT] == a[LEFT] && a[RIGHT] == b[RIGHT]) {
+// 				ans++;
+// 				intervals.erase(intervals.begin() + j);
+// 				j--;
+// 			}
+// 		}
+// 	}
+
+// 	vector<set<int>> overlap(intervals.size());
+// 	for (int i = 0; i < intervals.size() - 1; i++) {
+// 		vector<int> a = intervals[i];
+// 		for (int j = i + 1; j < intervals.size(); j++) {
+// 			vector<int> b = intervals[j];
+// 			if (a[LEFT] < b[RIGHT])
+// 			{
+// 				if (b[LEFT] < a[RIGHT])
+// 				{
+// 					overlap[i].insert(j);
+// 					overlap[j].insert(i);
+// 				}
+// 			}
+// 		}
+// 	}
+
+
+// 	vector<pair<int, int>> temp(intervals.size());
+// 	for (int i = 0; i < overlap.size(); i++) {
+// 		temp[i].first = overlap[i].size();
+// 		temp[i].second = i;
+// 	}
+
+// 	int i = 0;
+	
+// 	while (1)
+// 	{
+// 		int max_size = -1;
+// 		int index;
+// 		for (int j = 0; j < temp.size(); j++)
+// 		{
+// 			if (max_size < temp[j].first)
+// 			{
+// 				max_size = temp[j].first;
+// 				index = temp[j].second;
+// 			}
+// 		}
+// 		for (set<int> u : overlap)
+// 			cout << "size is " << u.size() << " " << endl;
+// 		bool dependency = false;
+// 		for (int j = 0; j < overlap.size(); j++)
+// 			if (overlap[j].size())
+// 				dependency = true;
+// 		if (!dependency)
+// 			break ;
+// 		for (int u : overlap[index])
+// 		{
+// 			overlap[u].erase(index);
+// 			temp[u].first--;
+// 		}
+// 		overlap[index].clear();
+// 		temp[index].first = 0;
+// 		for (auto u : overlap)
+// 		{
+// 			cout << "overlap is " << i << endl;
+// 			for (auto v : u)
+// 			    cout << v << " ";
+// 			cout << endl;
+// 		}
+// 		ans++;
+// 		i++;
+// 	}
+// 	cout << "ans is" << ans << endl;
+// 	return ans;
+// }
+
+
+// int Solution::eraseOverlapIntervals(vector<vector<int>>& intervals) {
+	
+// 	// sort(intervals.begin(), intervals.end(), [](vector<int> & s, vector<int> & t) {return s[1] - s[0] < t[1] - t[0];});
 // 	vector<vector<int>> range;
 // 	int ans = 0;
 // 	range.push_back(intervals[0]);

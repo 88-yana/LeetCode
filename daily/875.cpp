@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+
+//折角kを定数として考えられるのだから，kを使って具体的に求めるべき
 class Solution {
 public:
 	bool judge(vector<int>& piles, int& k, int& h) {
